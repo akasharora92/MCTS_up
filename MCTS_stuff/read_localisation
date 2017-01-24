@@ -1,0 +1,5 @@
+%read localisation text file and convert to matrix
+fileID = fopen('localisation_log2.txt','r');
+formatSpec = '%f';
+A = fscanf(fileID,formatSpec);
+

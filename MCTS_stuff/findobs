@@ -1,0 +1,7 @@
+[x,y] = find(~cellfun(@isempty,robot.obshistory))
+
+for i = size(x,1),
+    obs_cell = robot.obshistory{x(i), y(i)};
+    disp(i);
+    disp(obs_cell);
+end
