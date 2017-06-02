@@ -30,17 +30,31 @@ for sim_run = 1:tot_num,
     %initialise robot mode (remote=0 or local sense=1)
     robot.mode = 0;
     
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %initialise random position
     robot.xpos = round(rand(1)*(MapParameters.l_rows-10)) + 5; %100 cell padding to prevent rovers starting from the edge
     robot.ypos = round(rand(1)*(MapParameters.l_cols-10)) + 5;
     robot.orientation = 0;
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-    
+    %%%%%%%%%%%%%%%%%
     %generate random map
-    location_ground_truth = randi([1 3],num_x);
-    location_ground_truth = kron(location_ground_truth,ones(grid_size));
-    figure; imagesc(location_ground_truth);
+    %location_ground_truth = randi([1 3],num_x);
+    %location_ground_truth = kron(location_ground_truth,ones(grid_size));
+    %figure; imagesc(location_ground_truth);
     
-    [feature_map_1, feature_map_2, feature_map_3, rock_map, silica_map] = generateRockMap(location_ground_truth, DomainKnowledge_true);
+    %[feature_map_1, feature_map_2, feature_map_3, rock_map, silica_map] = generateRockMap(location_ground_truth, DomainKnowledge_true);
+    %%%%%%%%%%%%%%%%%%%
+    mapName = ['map_', num2str(sim_run), '.mat'];
+    load('mapName');
+    
+    location_ground_truth = fullMap{1};
+    feature_map_1 = fullMap{2}; 
+    feature_map_2 = fullMap{3}; 
+    feature_map_3 = fullMap{4}; 
+    rock_map = fullMap{5}; 
+    silica_map = fullMap{6};
+    
     
     %clear belief spaces
     %initialise rock and silica belief maps
