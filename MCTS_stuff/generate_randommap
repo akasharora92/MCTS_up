@@ -1,4 +1,0 @@
-%this function generates a random map of size x,y
-
-
-[feature_map_1, feature_map_2, feature_map_3, rock_map, location_map, silica_map] = generateRockMap(location_ground_truth, DomainKnowledge)

@@ -8,6 +8,8 @@ cost_data = zeros(num_actions, tot_num);
 recog_scoredata = zeros(num_actions, tot_num);
 unexplored_celldata = zeros(num_actions, tot_num);
 
+cost_remote = 1;
+cost_local = 8;
 
 tot_budget = 50;
 
@@ -53,14 +55,6 @@ for sim_run = 1:tot_num,
         BeliefMaps.F3(i)       = {prior_f3'};
     end
     
-    
-    %select random action start locations
-    % robot.xpos = round(rand(1)*(MapParameters.xsize-200)) + 100; %100 cell padding to prevent rovers starting from the edge
-    % robot.ypos = round(rand(1)*(MapParameters.ysize-200)) + 100;
-    % robot.orientation = round(rand(1)*3)*90;
-    
-    cost_remote = 1;
-    cost_local = 5;
     endstate = 0;
     
     cost_tot = 0;

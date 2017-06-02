@@ -4,7 +4,7 @@
 %run generate_randommap.m
 
 tot_num = 50;
-num_actions = 100;
+num_actions = 70;
 
 ent_data = zeros(num_actions, tot_num);
 cost_data = zeros(num_actions, tot_num);
@@ -13,7 +13,7 @@ unexplored_celldata = zeros(num_actions, tot_num);
 
 
 
-tot_budget = 50;
+tot_budget = 70;
 
 for sim_run = 1:tot_num,
     
@@ -183,7 +183,7 @@ for sim_run = 1:tot_num,
         end
         
         tic
-        max_iterations = 50;  % loops of MCTS
+        max_iterations = 100;  % loops of MCTS
         [ solution, root, list_of_all_nodes, winner ] = mcts_AA(leftover_budget, max_iterations, robot, MapParameters, BeliefMaps, sensor, DomainKnowledge, action_path);
         toc
         % Print the result
