@@ -234,3 +234,5 @@ action_space = zeros(MapParameters.l_rows, MapParameters.l_cols, num_orientation
 % load silica_map.mat;
 % load location_ground_truth.mat;
 
+load('initialPos.mat');
+

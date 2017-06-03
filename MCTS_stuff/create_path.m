@@ -1,49 +1,50 @@
-function [ action_sequence_tot ] = create_path( robot_xpos, robot_ypos )
-%create a uniform exhaustive sampling path based on start location
+function [ action_sequence ] = create_path( robot_xpos, robot_ypos, budget )
+%this function takes a start position for a robot and plans a fixed path
+%the path involves the robot looking straight, looking left, looking right,
+%local sensor straight, then move one step forward
 
-%we want the robot to take both remote sense and local sense actions
-num_actions = 50;
+remaining_budget = budget;
 
-%initialise sequence- x,y,orientation,sensing mode
-action_sequence_tot = [];
-action_mult = 20;
+action_sequence = [];
 
-%direction labels
-%0 is stay
-%1 is up
-%2 is left
-%3 is right
-%4 is down
+%sensing order: look left, look forward, look right, local forward.
 
-%direction_sequence = ['stay', 'up', 'left', 'down', 'down', 'right', 'right', 'up', 'up', 'up', 'left', 'left', 'left', 'down'];
-direction_sequence = [0,1,1,1,1,1,1,1,1,1];
+state = 1;
 
-new_robot_pos = [robot_xpos, robot_ypos];
+current_xpos = robot_xpos;
+current_ypos = robot_ypos;
 
-for i = 1:length(direction_sequence),
-    %figure out the next action based on the iteration
-    if direction_sequence(i) == 0, %stay
-        new_robot_pos = new_robot_pos;
-    elseif direction_sequence(i) == 1, %up
-        new_robot_pos = new_robot_pos + [0 20];
-    elseif direction_sequence(i) == 2, %left
-        new_robot_pos = new_robot_pos + [-20 0];
-    elseif direction_sequence(i) == 3, %right
-        new_robot_pos = new_robot_pos + [20 0];
-    elseif direction_sequence(i) == 4, %down
-        new_robot_pos = new_robot_pos + [0 -20];
+while remaining_budget > 0,
+    if state == 1, %look left
+        next_action = [current_xpos, current_ypos, -90, 0];
+        remaining_budget = remaining_budget - 1;
+    elseif state == 2, %look forward
+        next_action = [current_xpos, current_ypos, 0, 0];
+        remaining_budget = remaining_budget - 1;
+    elseif state == 3, %look right
+        next_action = [current_xpos, current_ypos, 90, 0];
+        remaining_budget = remaining_budget - 1;
+    elseif state == 4, %local sensor forward
+        if remaining_budget > 8, %check if robot has budget to use the local sensor
+            next_action = [current_xpos, current_ypos, 0, 1];
+            remaining_budget = remaining_budget - 8;
+        else
+            next_action = [current_xpos, current_ypos, 0, 0];
+            remaining_budget = remaining_budget - 1;
+        end
+    else %move forward
+        current_ypos = current_ypos + 1;
+        next_action = [current_xpos, current_ypos, 0, 0];
+        remaining_budget = remaining_budget - 1;
     end
     
-    action_sequence = zeros(6,4);
-    action_sequence(:,1) = new_robot_pos(1)*ones(6,1);
-    action_sequence(:,2) = new_robot_pos(2)*ones(6,1);
-    action_sequence(:,3) = [0;0;90;90;270;270];
-    action_sequence(:,4) = [0;1;0;1;0;1];
-    action_sequence_tot = [action_sequence_tot;action_sequence];
-    
+    action_sequence = [action_sequence; next_action];
+    if state == 5,
+        state = 1;
+    else
+        state = state + 1;
+    end
 end
-
-action_sequence_tot = action_sequence_tot(1:num_actions,:);
 
 end
 
