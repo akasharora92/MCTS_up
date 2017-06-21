@@ -48,13 +48,13 @@ for i = 1:size(state_sequence,1),
             %remote sense
             %get predicted observation
             %simulated belief update and get info gain and new belief
-            [BeliefMaps, infoGain, robot_current] = simulate_BeliefUpdate(BeliefMaps, sensor, DomainKnowledge, MapParameters, robot_current, i);
+            [BeliefMaps, infoGain, robot_current] = simulate_BeliefUpdate(BeliefMaps, sensor, DomainKnowledge, MapParameters, robot_current, 1);
             
         else
             %local sense
             %get predicted observation and simulate belief update and get info
             %gain and new belief
-            [BeliefMaps, infoGain, robot_current] = simulate_BeliefUpdate_silica(BeliefMaps, sensor, DomainKnowledge, MapParameters, robot_current, i);
+            [BeliefMaps, infoGain, robot_current] = simulate_BeliefUpdate_silica(BeliefMaps, sensor, DomainKnowledge, MapParameters, robot_current, 1);
             
         end
         
@@ -71,5 +71,6 @@ entropy = abs(sum(prob_dist.*log(prob_dist)));
 entropy_init = MapParameters.l_cols*MapParameters.l_rows*entropy;
 
 infoGain_tot = 1- ((entropy_tot - infoGain_tot)/entropy_init);
+%infoGain_tot = infoGain_tot/entropy_tot;
 end
 

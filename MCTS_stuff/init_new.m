@@ -46,9 +46,10 @@ knowledge_accuracy = 1;
 
 %simulation setting
 %theta_rl = [0.8 0.18 0.02; 0.6 0.38 0.02; 0.4 0.4 0.2];
+theta_rl = [0.8 0.18 0.02; 0.2 0.6 0.2; 0.2 0.3 0.5];
 
 %JFR setting
-theta_rl = [0.75,0.05,0.2; 0.05,0.8,0.15; 0.15,0.05,0.8]; 
+%theta_rl = [0.75,0.05,0.2; 0.05,0.8,0.15; 0.15,0.05,0.8]; 
 DomainKnowledge_true.theta_rl = theta_rl';
 
 theta_rl = knowledge_accuracy*theta_rl + (1-knowledge_accuracy)*(1/3)*ones(3,3);
@@ -176,7 +177,8 @@ robot.orientation = 0;
 
 %sensor parameters
 sensor.x_trans = 0;
-sensor.y_trans = 50;
+%sensor.y_trans = 50;
+sensor.y_trans = 30;
 sensor.FOV.width = 50;
 sensor.FOV.height = 40;
 sensor.FOV.coords = getsensorFOV(sensor);

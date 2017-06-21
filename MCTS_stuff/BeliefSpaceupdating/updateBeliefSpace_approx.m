@@ -7,6 +7,7 @@ function [ BeliefMaps, robot, infoGain_sum ] = updateBeliefSpace_approx( BeliefM
 % robot_orientation = robot.orientation;
 
 infoGain_sum = 0;
+initent = 0;
 
 if obs_vect(1,4) == 1,
     %only silica measured
@@ -16,6 +17,14 @@ else
     remote_sense_flag = 1;
 end
 
+%get initial entropy
+for i=1:MapParameters.l_rows,
+    for j=1:MapParameters.l_cols,         
+        prior_l2 = BeliefMaps.Location{i,j}';    
+        prior_ent = abs(sum(prior_l2.*log(prior_l2)));
+        initent = initent + prior_ent; 
+    end
+end
 
 if remote_sense_flag == 1, %remote sense made
     %list of cells that were seen
@@ -59,7 +68,7 @@ for i = 1:size(obs_vect,1)
         %area around it
         % disp('New obs');
         %tic
-        [BeliefMaps, infoGain] = update_lspace(obs_vect(i,:), DomainKnowledge, BeliefMaps, p_zgivenr, MapParameters);
+        [BeliefMaps, ~] = update_lspace(obs_vect(i,:), DomainKnowledge, BeliefMaps, p_zgivenr, MapParameters);
         %toc
         
         % tic
@@ -79,8 +88,9 @@ for i = 1:size(obs_vect,1)
         
         
     else
+        robot.visibility_silica(obs_vect(i,5), obs_vect(i,6)) = 2;
         %silica content directly measured- single observation
-        [BeliefMaps, infoGain] = update_lspace_s(obs_vect(i,:), DomainKnowledge, BeliefMaps, MapParameters);
+        [BeliefMaps, ~] = update_lspace_s(obs_vect(i,:), DomainKnowledge, BeliefMaps, MapParameters);
         %BeliefMaps = update_ALL_s(obs_vect, DomainKnowledge, BeliefMaps, MapParameters, robot);
         %BeliefMaps = update_sspace_s(obs_vect(i,:), DomainKnowledge, BeliefMaps, MapParameters);
         
@@ -95,9 +105,21 @@ for i = 1:size(obs_vect,1)
         
     end
     
-    infoGain_sum = infoGain + infoGain_sum;
 end
 
+
+%get final entropy
+finalent = 0;
+for i=1:MapParameters.l_rows,
+    for j=1:MapParameters.l_cols,         
+        prior_l2 = BeliefMaps.Location{i,j}';    
+        prior_ent = abs(sum(prior_l2.*log(prior_l2)));
+        finalent = finalent + prior_ent; 
+    end
+end
+
+
+infoGain_sum = initent - finalent;
 
 end
 

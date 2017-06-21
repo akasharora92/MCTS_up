@@ -15,7 +15,7 @@ p_sgivenl = DomainKnowledge.theta_sl;
 
 
 %search neighbourhood
-search_radius = 100;
+search_radius = 80;
 
 
 location_obs = [loc_x, loc_y];
@@ -32,7 +32,7 @@ for i=1:MapParameters.l_rows,
         
         %check if location is outside the search_radius (cell too far to
         %be influenced by observations
-        if ((20*norm(location_2 - location_obs)) > search_radius),
+        if ((norm(location_2 - location_obs)) > (search_radius/20)),
             continue
         end
         

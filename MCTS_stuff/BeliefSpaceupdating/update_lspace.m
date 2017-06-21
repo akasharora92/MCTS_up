@@ -59,7 +59,7 @@ for i=1:MapParameters.l_rows,
         
         posterior_ent = abs(sum(posterior_l2.*log(posterior_l2)));
         BeliefMaps.Location{i,j} = posterior_l2;
-        
+         
         infoGain = (prior_ent - posterior_ent) + infoGain;
         
     end

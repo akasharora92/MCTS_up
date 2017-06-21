@@ -7,7 +7,7 @@ loc_y = round(mean(obs_vect(:,6)));
 p_sgivenl = DomainKnowledge.theta_sl;
 
 %search neighbourhood
-search_radius = 100;
+search_radius = 80;
 
 
 location_obs = [loc_x, loc_y];
